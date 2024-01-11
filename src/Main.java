@@ -1,10 +1,13 @@
 import java.io.IOException;
 import java.io.PrintStream;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Main {
-    static Scanner scan = new Scanner(System.in);
+    private static Scanner scan = new Scanner(System.in);
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     public static void main(String[] args) throws IOException {
         ProductRepository repository = new ProductRepository();
         String key = "";
@@ -49,18 +52,24 @@ public class Main {
                         switch (event) {
                             case ProductShipped productShipped:
                                 System.out.println(
-                                        productShipped.dateTime()
-                                        + " " + sku
-                                        + " Shipped: "
-                                        + productShipped.quantity());
+                                    productShipped.dateTime().format(formatter)
+                                    + " " + sku
+                                    + " Shipped: "
+                                    + productShipped.quantity());
                                 break;
                             case ProductReceived productReceived:
-                                System.out.println(productReceived.dateTime() + " " + sku + " Received: " + productReceived.quantity());
+                                System.out.println(
+                                    productReceived.dateTime().format(formatter)
+                                    + " " + sku
+                                    + " Received: "
+                                    + productReceived.quantity());
                                 break;
                             case ProductAdjusted productAdjusted:
-                                PrintStream var10000 = System.out;
-                                LocalDateTime var10001 = productAdjusted.dateTime();
-                                var10000.println("" + var10001 + " " + sku + " Adjusted: " + productAdjusted.quantity() + " Reason: " + productAdjusted.reason());
+                                System.out.println(
+                                    productAdjusted.dateTime().format(formatter)
+                                    + " " + sku + " Adjusted: "
+                                    + productAdjusted.quantity()
+                                    + " Reason: " + productAdjusted.reason());
                                 break;
                             default:
                                 throw new IllegalStateException("Unexpected value: " + event);

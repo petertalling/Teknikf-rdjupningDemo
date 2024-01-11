@@ -1,7 +1,6 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Product {
     public String sku;
@@ -55,18 +54,15 @@ public class Product {
     }
 
     public void apply(ProductShipped event) {
-        CurrentState var10000 = this.currentState;
-        var10000.quantityInStock -= event.quantity();
+        currentState.quantityInStock -= event.quantity();
     }
 
     public void apply(ProductReceived event) {
-        CurrentState var10000 = this.currentState;
-        var10000.quantityInStock += event.quantity();
+        currentState.quantityInStock += event.quantity();
     }
 
     public void apply(ProductAdjusted event) {
-        CurrentState var10000 = this.currentState;
-        var10000.quantityInStock += event.quantity();
+        currentState.quantityInStock += event.quantity();
     }
 
     public List<EventInterface> getEvents() {

@@ -1,6 +1,7 @@
 import java.time.LocalDateTime;
 
-public record ProductAdjusted(String item, int quantity, String reason, LocalDateTime dateTime) implements EventInterface {
+public record ProductAdjusted(String item, int quantity, String reason,
+                              LocalDateTime dateTime) implements EventInterface {
     public ProductAdjusted(String item, int quantity, String reason, LocalDateTime dateTime) {
         this.item = item;
         this.quantity = quantity;
