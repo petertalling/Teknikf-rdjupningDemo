@@ -3,6 +3,7 @@ import java.util.List;
 
 public class ProductRepository {
     private HashMap<String, List<EventInterface>> inMemoryStreams = new HashMap();
+    //private HashMap<String, ProductInfo> snapshots = new HashMap();
 
     public ProductRepository() {
     }
@@ -16,6 +17,6 @@ public class ProductRepository {
     }
 
     public void save(Product product) {
-        this.inMemoryStreams.put(product.sku, product.getEvents());
+        inMemoryStreams.put(product.sku, product.getEvents());
     }
 }
