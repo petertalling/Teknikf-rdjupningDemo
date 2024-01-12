@@ -12,45 +12,37 @@ public class Product {
     }
 
     public boolean shipProduct(int quantity) {
-        if (quantity > this.currentState.quantityInStock) {
+        if (quantity > currentState.quantityInStock) {
             System.out.println("Not enough in stock of this product..");
             return false;
         } else {
-            this.addEvent(new ProductShipped(this.sku, quantity, LocalDateTime.now()));
+            addEvent(new ProductShipped(sku, quantity, LocalDateTime.now()));
             return true;
         }
     }
 
     public void receiveProduct(int quantity) {
-        this.addEvent(new ProductReceived(this.sku, quantity, LocalDateTime.now()));
+        addEvent(new ProductReceived(sku, quantity, LocalDateTime.now()));
     }
 
     public boolean adjustInventory(int quantity, String reason) {
-        if (this.currentState.quantityInStock + quantity < 0) {
+        if (currentState.quantityInStock + quantity < 0) {
             System.out.println("Not enough in stock of this product..");
             return false;
         } else {
-            this.addEvent(new ProductAdjusted(this.sku, quantity, reason, LocalDateTime.now()));
+            addEvent(new ProductAdjusted(sku, quantity, reason, LocalDateTime.now()));
             return true;
         }
     }
 
     public void addEvent(EventInterface event) {
         switch (event) {
-            case ProductShipped productShipped:
-                this.apply(productShipped);
-                break;
-            case ProductReceived productReceived:
-                this.apply(productReceived);
-                break;
-            case ProductAdjusted productAdjusted:
-                this.apply(productAdjusted);
-                break;
-            default:
-                System.out.println("Event type not supported");
+            case ProductShipped productShipped -> apply(productShipped);
+            case ProductReceived productReceived -> apply(productReceived);
+            case ProductAdjusted productAdjusted -> apply(productAdjusted);
+            default -> System.out.println("Event type not supported");
         }
-
-        this.events.add(event);
+        events.add(event);
     }
 
     public void apply(ProductShipped event) {
@@ -66,10 +58,10 @@ public class Product {
     }
 
     public List<EventInterface> getEvents() {
-        return this.events;
+        return events;
     }
 
     public int getQuantityInStock() {
-        return this.currentState.quantityInStock;
+        return currentState.quantityInStock;
     }
 }
