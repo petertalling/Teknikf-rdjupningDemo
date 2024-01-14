@@ -1,4 +1,5 @@
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -6,7 +7,7 @@ public class Main {
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static void main(String[] args) {
-        ProductRepository repository = new ProductRepository();
+        ProductRepository productRepository = new ProductRepository();
         String key = "";
 
         while (!key.equals("X")) {
@@ -19,7 +20,8 @@ public class Main {
             key = scan.nextLine().toUpperCase();
             System.out.print("sku: ");
             String sku = scan.nextLine();
-            Product product = repository.get(sku);
+
+            Product product = productRepository.get(sku);
             switch (key) {
                 case "R" -> {
                     int receiveQuantity = getQuantityFromInput();
@@ -45,7 +47,8 @@ public class Main {
                 }
                 case "E" -> {
                     System.out.println(sku + " All events:");
-                    product.getEvents().forEach((event) -> {
+                    List<EventInterface> eventList = productRepository.eventHistory(sku);
+                    eventList.forEach((event) -> {
                         switch (event) {
                             case ProductShipped productShipped -> System.out.println(
                                     productShipped.dateTime().format(formatter)
@@ -69,7 +72,7 @@ public class Main {
                 }
             }
 
-            repository.save(product);
+            productRepository.save(product);
             System.out.println();
             System.out.println("-------------------------");
         }
