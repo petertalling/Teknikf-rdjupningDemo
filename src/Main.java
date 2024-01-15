@@ -3,8 +3,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static Scanner scan = new Scanner(System.in);
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final Scanner scan = new Scanner(System.in);
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static void main(String[] args) {
         ProductRepository productRepository = new ProductRepository();
@@ -82,7 +82,6 @@ public class Main {
         System.out.print("Enter adjustment reason: ");
         return scan.nextLine();
     }
-
     private static int getQuantityFromInput() {
         System.out.print("Enter quantity: ");
         String input = scan.nextLine();
@@ -92,7 +91,6 @@ public class Main {
         }
         return Integer.parseInt(input);
     }
-
     private static boolean isInteger(String input) {
         try {
             Integer.parseInt(input);

@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SnapshotRepository {
-    public HashMap<String, List<CurrentState>> snapshots = new HashMap();
+    public HashMap<String, List<CurrentState>> snapshots = new HashMap<>();
 
     public CurrentState getCurrentState(String sku) {
         CurrentState currentState = new CurrentState();

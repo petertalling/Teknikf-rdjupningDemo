@@ -5,12 +5,11 @@ import java.util.List;
 public class Product {
     public String sku;
     public CurrentState currentState = new CurrentState();
-    private List<EventInterface> events = new ArrayList();
+    private final List<EventInterface> events = new ArrayList<>();
 
     public void setCurrentState(CurrentState currentState) {
         this.currentState = currentState;
     }
-
     public void setEvents(List<EventInterface> events) {
         this.events.clear();
         this.events.addAll(events);
@@ -18,11 +17,9 @@ public class Product {
     public List<EventInterface> getEvents() {
         return events;
     }
-
     public Product(String sku) {
         this.sku = sku;
     }
-
     public boolean shipProduct(int quantity) {
         if (quantity > currentState.quantityInStock) {
             System.out.println("Not enough in stock of this product..");
@@ -32,11 +29,9 @@ public class Product {
             return true;
         }
     }
-
     public void receiveProduct(int quantity) {
         addEvent(new ProductReceived(sku, quantity, LocalDateTime.now()));
     }
-
     public boolean adjustInventory(int quantity, String reason) {
         if (currentState.quantityInStock + quantity < 0) {
             System.out.println("Not enough in stock of this product..");
@@ -46,12 +41,10 @@ public class Product {
             return true;
         }
     }
-
     public void addEvent(EventInterface event) {
         applyEvent(event);
         events.add(event);
     }
-
     public void applyEvent(EventInterface event){
         switch (event) {
             case ProductShipped productShipped -> applyShipped(productShipped);
@@ -60,23 +53,18 @@ public class Product {
             default -> System.out.println("Event type not supported");
         }
     }
-
     public void applyShipped(ProductShipped event) {
         currentState.quantityInStock -= event.quantity();
         currentState.sequenceNumber +=1;
     }
-
     public void applyReceived(ProductReceived event) {
         currentState.quantityInStock += event.quantity();
         currentState.sequenceNumber +=1;
     }
-
     public void applyAdjusted(ProductAdjusted event) {
         currentState.quantityInStock += event.quantity();
         currentState.sequenceNumber +=1;
     }
-
-
     public int getQuantityInStock() {
         return currentState.quantityInStock;
     }

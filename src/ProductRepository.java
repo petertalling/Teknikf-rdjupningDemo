@@ -2,8 +2,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ProductRepository {
-    private HashMap<String, List<EventInterface>> inMemoryStreams = new HashMap();
-    private SnapshotRepository snapshotsRepository = new SnapshotRepository();
+    private final HashMap<String, List<EventInterface>> eventStore = new HashMap<>();
+    private final SnapshotRepository snapshotsRepository = new SnapshotRepository();
 
     public ProductRepository() {
     }
@@ -11,9 +11,9 @@ public class ProductRepository {
     public Product get(String sku) {
         Product product = new Product(sku);
         //Add all events to product if any
-        if (inMemoryStreams.containsKey(sku)) {
-            product.setEvents(inMemoryStreams.get(sku));
-        }else {
+        if (eventStore.containsKey(sku)) {
+            product.setEvents(eventStore.get(sku));
+        } else {
             return product;
         }
         //Set product current state to latest snapshot if exists
@@ -22,25 +22,23 @@ public class ProductRepository {
             CurrentState lastCurrentState = currentStates.get(currentStates.size() - 1).clone();
             product.setCurrentState(lastCurrentState);
 
-            //Read all events after product sequence number
-            List<EventInterface> eventsToAddToProduct = inMemoryStreams.get(sku).stream().
+            //Apply all events after snapshot sequence number to product
+            List<EventInterface> eventsToAddToProduct = eventStore.get(sku).stream().
                     skip(lastCurrentState.sequenceNumber).toList();
             eventsToAddToProduct.forEach(product::applyEvent);
 
         } else {
-            inMemoryStreams.get(sku).forEach(product::applyEvent);
+            eventStore.get(sku).forEach(product::applyEvent);
         }
         return product;
     }
-
     public void save(Product product) {
-        inMemoryStreams.put(product.sku, product.getEvents());
-        if (product.currentState.sequenceNumber - snapshotsRepository.getCurrentState(product.sku).sequenceNumber >= 5){
-
+        eventStore.put(product.sku, product.getEvents());
+        if (product.currentState.sequenceNumber - snapshotsRepository.getCurrentState(product.sku).sequenceNumber >= 5) {
+            snapshotsRepository.createSnapshot(product);
         }
     }
-
     public List<EventInterface> eventHistory(String sku) {
-        return inMemoryStreams.get(sku);
+        return eventStore.get(sku);
     }
 }
