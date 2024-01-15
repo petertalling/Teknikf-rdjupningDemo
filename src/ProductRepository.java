@@ -26,6 +26,7 @@ public class ProductRepository {
             List<EventInterface> eventsToAddToProduct = eventStore.get(sku).stream().
                     skip(lastCurrentState.sequenceNumber).toList();
             eventsToAddToProduct.forEach(product::applyEvent);
+            System.out.println("current state updated from snapshot!");
 
         } else {
             eventStore.get(sku).forEach(product::applyEvent);
@@ -36,6 +37,7 @@ public class ProductRepository {
         eventStore.put(product.sku, product.getEvents());
         if (product.currentState.sequenceNumber - snapshotsRepository.getCurrentState(product.sku).sequenceNumber >= 5) {
             snapshotsRepository.createSnapshot(product);
+            System.out.println("snapshot created!");
         }
     }
     public List<EventInterface> eventHistory(String sku) {

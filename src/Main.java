@@ -71,8 +71,9 @@ public class Main {
                     });
                 }
             }
-
-            productRepository.save(product);
+            switch (key) {
+                case "R", "S", "A" -> productRepository.save(product);
+            }
             System.out.println();
             System.out.println("-------------------------");
         }
@@ -82,6 +83,7 @@ public class Main {
         System.out.print("Enter adjustment reason: ");
         return scan.nextLine();
     }
+
     private static int getQuantityFromInput() {
         System.out.print("Enter quantity: ");
         String input = scan.nextLine();
@@ -91,6 +93,7 @@ public class Main {
         }
         return Integer.parseInt(input);
     }
+
     private static boolean isInteger(String input) {
         try {
             Integer.parseInt(input);
