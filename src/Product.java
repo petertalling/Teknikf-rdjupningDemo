@@ -55,15 +55,12 @@ public class Product {
     }
     public void applyShipped(ProductShipped event) {
         currentState.quantityInStock -= event.quantity();
-        currentState.sequenceNumber +=1;
     }
     public void applyReceived(ProductReceived event) {
         currentState.quantityInStock += event.quantity();
-        currentState.sequenceNumber +=1;
     }
     public void applyAdjusted(ProductAdjusted event) {
         currentState.quantityInStock += event.quantity();
-        currentState.sequenceNumber +=1;
     }
     public int getQuantityInStock() {
         return currentState.quantityInStock;
